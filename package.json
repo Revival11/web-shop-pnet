@@ -1,0 +1,19 @@
+{
+  "name": "playnet-smp-store-midtrans",
+  "version": "1.0.0",
+  "description": "PlayNet SMP Store dengan Login Server Minecraft & Pembayaran Otomatis Midtrans Snap (Support Termux & Vercel)",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "vercel": "npx vercel",
+    "deploy": "npx vercel --prod"
+  },
+  "dependencies": {
+    "rcon-client": "^4.2.5"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

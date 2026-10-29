@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PlayNet SMP Store · Official Webstore & Client Area</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0b0e0c;
+  --bg-raised:#121611;
+  --panel:#161b16;
+  --panel-hover:#1c231c;
+  --panel-border:rgba(255,255,255,.08);
+  --panel-border-strong:rgba(61,220,132,.35);
+  --ink:#eef1ec;
+  --ink-dim:#9aa39a;
+  --ink-faint:#6b746b;
+  --moss:#3ddc84;
+  --moss-dim:rgba(61,220,132,.15);
+  --midtrans-blue:#00a2e9;
+  --midtrans-dim:rgba(0,162,233,.15);
+  --gold:#f0b23c;
+  --copper:#d0895a;
+  --iron:#a7b0ac;
+  --diamond:#4fd6e0;
+  --emerald:#33c17d;
+  --amethyst:#a677e0;
+  --netherite:#8b7fae;
+  --celestial-a:#f5d76e;
+  --celestial-b:#4fd6e0;
+  --celestial-c:#c58cff;
+  --danger:#e0685a;
+  --radius-s:10px;
+  --radius-m:16px;
+  --radius-l:24px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%,rgba(61,220,132,.12),transparent 60%),
+    var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4,.display{font-family:'Space Grotesk',sans-serif}
+code,pre,.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit}
+button,input,select{font-family:'Inter',sans-serif}
+::selection{background:var(--moss-dim)}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+.block-field{
+  position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.45;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:42px 42px;
+}
+
+/* NAVBAR */
+nav{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(14px);
+  background:rgba(11,14,12,.84);
+  border-bottom:1px solid var(--panel-border);
+}
+.nav-row{
+  max-width:960px;margin:auto;padding:13px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;text-decoration:none}
+.brand-dot{
+  width:9px;height:9px;border-radius:3px;background:var(--moss);
+  box-shadow:0 0 10px var(--moss);
+}
+.nav-links{display:flex;align-items:center;gap:20px;font-size:13.5px;color:var(--ink-dim)}
+.nav-links a{text-decoration:none;transition:.2s}
+.nav-links a:hover{color:var(--ink)}
+
+.nav-right{display:flex;align-items:center;gap:8px}
+.mc-nav-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:7px 13px;border-radius:var(--radius-s);
+  border:1px solid var(--panel-border-strong);
+  background:var(--moss-dim);color:var(--ink);
+  font-size:13px;font-weight:600;cursor:pointer;transition:.2s;
+}
+.mc-nav-btn:hover{background:var(--moss);color:#08110b}
+.mc-nav-btn.logged-in{
+  background:var(--panel);border-color:var(--panel-border);
+}
+.mc-nav-btn.logged-in:hover{
+  border-color:var(--moss);color:var(--ink);
+}
+.avatar-head{
+  width:22px;height:22px;border-radius:4px;image-rendering:pixelated;
+  border:1px solid rgba(255,255,255,.2);flex-shrink:0;background:#1e261e;
+}
+.platform-pill{
+  font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.platform-pill.java{background:rgba(79,214,224,.16);color:var(--diamond)}
+.platform-pill.bedrock{background:rgba(51,193,125,.18);color:var(--emerald)}
+
+@media(max-width:760px){.nav-links{display:none}}
+
+/* HERO */
+header{padding:62px 20px 44px;text-align:center}
+.status-pill{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 14px;margin-bottom:20px;
+  border-radius:999px;border:1px solid var(--panel-border);background:var(--panel);
+  color:var(--ink-dim);font-size:12.5px;
+}
+.live-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--moss);
+  box-shadow:0 0 8px var(--moss);animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero-title{font-size:46px;line-height:1.08;margin-bottom:14px}
+.hero-title .accent{color:var(--moss)}
+.hero-sub{max-width:560px;margin:0 auto 28px;color:var(--ink-dim);font-size:16px}
+.hero-buttons{
+  display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:32px;
+}
+.hero-btn{
+  padding:12px 20px;border-radius:var(--radius-s);border:1px solid var(--panel-border);
+  text-decoration:none;font-size:14px;font-weight:700;transition:.2s;cursor:pointer;
+  background:var(--panel);color:var(--ink);display:inline-flex;align-items:center;gap:8px;
+}
+.hero-btn.primary{background:var(--moss);color:#08110b;border-color:var(--moss)}
+.hero-btn:hover{transform:translateY(-2px)}
+
+.ip-row{max-width:430px;margin:auto;display:flex;flex-direction:column;gap:10px}
+.ip-box{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;
+  border-radius:var(--radius-m);background:var(--panel);border:1px solid var(--panel-border);
+  text-align:left;
+}
+.ip-box .label{
+  display:block;color:var(--ink-faint);font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+}
+.ip-box .value{font-family:'Space Grotesk',sans-serif;font-weight:600}
+.copy-btn{
+  flex-shrink:0;border:1px solid var(--panel-border);border-radius:var(--radius-s);padding:8px 13px;
+  background:transparent;color:var(--ink);cursor:pointer;font-weight:600;transition:.2s;
+}
+.copy-btn:hover{border-color:var(--moss);color:var(--moss)}
+
+/* SECTIONS */
+.sec{padding:64px 20px}
+.sec-alt{
+  background:var(--bg-raised);
+  border-top:1px solid var(--panel-border);border-bottom:1px solid var(--panel-border);
+}
+.sec-head{max-width:620px;margin-bottom:34px}
+.sec-head h2{font-size:29px;margin-bottom:8px}
+.sec-head p{color:var(--ink-dim);font-size:15px}
+
+/* CLIENT AREA DASHBOARD */
+.client-card{
+  background:var(--panel);border:1px solid var(--panel-border);
+  border-radius:var(--radius-l);padding:26px 24px;
+}
+.client-guest{
+  text-align:center;padding:34px 16px;
+}
+.client-guest-avatar{
+  width:56px;height:56px;border-radius:12px;image-rendering:pixelated;
+  border:2px solid var(--panel-border);margin:0 auto 14px;display:block;
+}
+.client-guest h3{font-size:21px;margin-bottom:6px}
+.client-guest p{color:var(--ink-dim);font-size:14px;max-width:440px;margin:0 auto 20px}
+
+.client-header{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  padding-bottom:20px;border-bottom:1px solid var(--panel-border);margin-bottom:20px;
+}
+.client-profile{display:flex;align-items:center;gap:16px}
+.client-avatar-lg{
+  width:56px;height:56px;border-radius:12px;image-rendering:pixelated;
+  border:2px solid var(--moss);background:#1b221b;flex-shrink:0;
+}
+.client-name-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.client-gamertag{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700}
+.rank-badge{
+  padding:4px 11px;border-radius:999px;font-size:11.5px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.05em;color:#08110b;background:var(--iron);
+}
+.client-sub{font-size:13px;color:var(--ink-dim);margin-top:2px}
+
+.client-stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:14px;margin-bottom:22px;
+}
+.stat-box{
+  padding:16px 18px;border-radius:var(--radius-m);background:var(--bg-raised);
+  border:1px solid var(--panel-border);
+}
+.stat-box .st-label{
+  font-size:11.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;
+}
+.stat-box .st-val{
+  font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-top:4px;
+}
+.stat-box .st-sub{font-size:12px;color:var(--ink-dim);margin-top:2px}
+
+.client-tabs{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;
+}
+.client-tab{
+  padding:9px 16px;border-radius:var(--radius-s);border:1px solid var(--panel-border);
+  background:var(--bg-raised);color:var(--ink-dim);cursor:pointer;font-size:13px;font-weight:600;
+  transition:.2s;
+}
+.client-tab.active{
+  background:var(--moss);color:#08110b;border-color:var(--moss);
+}
+.client-pane{display:none}
+.client-pane.active{display:block}
+
+.perks-box{
+  padding:18px 20px;border-radius:var(--radius-m);background:var(--bg-raised);
+  border:1px solid var(--panel-border);
+}
+.perks-list{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:12px;
+}
+.perk-item{
+  padding:10px 13px;border-radius:var(--radius-s);background:var(--panel);
+  border:1px solid var(--panel-border);font-size:13px;display:flex;align-items:center;gap:8px;
+}
+
+.my-kits-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;
+}
+.owned-kit-card{
+  padding:16px;border-radius:var(--radius-m);background:var(--bg-raised);
+  border:1px solid var(--panel-border);display:flex;flex-direction:column;gap:8px;
+}
+
+.btn-sm{
+  padding:8px 14px;border-radius:var(--radius-s);font-size:12.5px;font-weight:700;
+  cursor:pointer;transition:.2s;border:1px solid var(--panel-border);background:var(--bg-raised);color:var(--ink);
+}
+.btn-sm.primary{background:var(--moss);color:#08110b;border-color:var(--moss)}
+.btn-sm.danger:hover{border-color:var(--danger);color:var(--danger)}
+.btn-sm:hover{border-color:var(--moss)}
+
+/* INFO GRID */
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+.info-card{
+  padding:20px;background:var(--panel);border:1px solid var(--panel-border);border-radius:var(--radius-m);
+}
+.info-card h3{font-size:16px;margin-bottom:8px}
+.info-card p{color:var(--ink-dim);font-size:14px}
+
+/* RANK LADDER */
+.ladder{display:flex;flex-direction:column}
+.rung{
+  display:grid;grid-template-columns:32px 1fr;gap:18px;position:relative;
+}
+.stem{position:relative;display:flex;justify-content:center}
+.stem::before{
+  content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;
+  transform:translateX(-50%);background:var(--panel-border);
+}
+.rung:first-child .stem::before{top:16px}
+.rung:last-child .stem::before{bottom:calc(100% - 16px)}
+.node{
+  position:relative;z-index:2;width:32px;height:32px;margin-top:16px;display:flex;
+  align-items:center;justify-content:center;border-radius:8px;color:#08110b;font-weight:800;font-size:13px;
+}
+.rung-card{
+  margin-bottom:14px;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;
+  gap:18px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--panel-border);
+  border-radius:var(--radius-m);transition:.2s;
+}
+.rung-card:hover{border-color:var(--tier-color)}
+.rung-card.owned-rank{
+  border-color:var(--moss);
+  box-shadow:0 0 0 1px var(--moss);
+}
+.rung-name{
+  font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.owned-pill{
+  font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;
+  padding:2px 8px;border-radius:999px;background:var(--moss-dim);color:var(--moss);
+}
+.rung-desc{margin-top:3px;font-size:12.5px;color:var(--ink-faint)}
+.rung-actions{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.rung-price{
+  font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--tier-color);
+}
+.pick-btn{
+  padding:9px 18px;border-radius:var(--radius-s);border:1.5px solid var(--tier-color);
+  background:transparent;color:var(--tier-color);cursor:pointer;font-weight:700;transition:.2s;
+}
+.pick-btn:hover{background:var(--tier-color);color:#08110b}
+.pick-btn.active-owned{
+  background:var(--moss);border-color:var(--moss);color:#08110b;
+}
+.celestial{
+  background:linear-gradient(
+    120deg,
+    rgba(245,215,110,.08),
+    rgba(79,214,224,.08),
+    rgba(197,140,255,.08)
+  );
+}
+.celestial .rung-price{
+  background:linear-gradient(120deg,var(--celestial-a),var(--celestial-b),var(--celestial-c));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* KIT GRID */
+.kit-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:14px;
+}
+.kit-card{
+  padding:20px;display:flex;flex-direction:column;gap:9px;background:var(--panel);
+  border:1px solid var(--panel-border);border-radius:var(--radius-m);transition:.2s;
+}
+.kit-card:hover{transform:translateY(-2px)}
+.kit-name{
+  display:flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:700;
+}
+.swatch{width:10px;height:10px;border-radius:3px}
+.kit-price{font-size:21px;font-weight:700}
+.kit-note{font-size:12.5px;color:var(--ink-faint)}
+.kit-card button{
+  margin-top:6px;padding:9px;border-radius:var(--radius-s);border:1px solid var(--panel-border);
+  background:transparent;color:var(--ink);cursor:pointer;font-weight:600;transition:.2s;
+}
+.kit-card button:hover{border-color:var(--moss);color:var(--moss)}
+
+/* MONEY CONVERTER */
+.converter{
+  padding:28px 24px;background:var(--panel);border:1px solid var(--panel-border);
+  border-radius:var(--radius-l);
+}
+.rate-line{text-align:center;color:var(--ink-dim);margin-bottom:24px;font-size:14px}
+.stepper{display:flex;justify-content:center;align-items:center;gap:18px;margin-bottom:22px}
+.step-btn{
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--panel-border);
+  background:var(--bg-raised);color:var(--ink);cursor:pointer;font-size:21px;font-weight:700;
+}
+.step-btn:hover{border-color:var(--moss);color:var(--moss)}
+.amount-display{min-width:180px;text-align:center}
+.amount-display .amt{font-family:'Space Grotesk',sans-serif;font-size:27px;font-weight:700}
+.amount-display .unit{color:var(--ink-faint);font-size:12px}
+.price-out{padding-top:20px;text-align:center;border-top:1px dashed var(--panel-border)}
+.price-out .label{color:var(--ink-faint);font-size:12px;text-transform:uppercase}
+.price-out .value{
+  margin-top:6px;color:var(--moss);font-family:'Space Grotesk',sans-serif;font-size:29px;font-weight:700;
+}
+.cta-row{display:flex;justify-content:center;margin-top:20px}
+.cta-row button{
+  padding:12px 26px;border:none;border-radius:var(--radius-s);background:var(--moss);
+  color:#08110b;font-weight:700;cursor:pointer;
+}
+
+/* REFUND */
+.refund-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
+}
+.refund-card{
+  padding:22px;background:var(--panel);border:1px solid var(--panel-border);border-radius:var(--radius-m);
+}
+.refund-card h3{margin-bottom:12px;font-size:16px}
+.refund-card ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.refund-card li{
+  display:flex;align-items:flex-start;gap:9px;color:var(--ink-dim);font-size:14px;
+}
+.refund-card li::before{content:"—";color:var(--ink-faint)}
+
+/* ORDER & MIDTRANS CHECKOUT */
+.order-box{
+  padding:26px 24px;background:var(--panel);border:1px solid var(--panel-border);border-radius:var(--radius-l);
+}
+.order-empty{padding:30px 10px;text-align:center;color:var(--ink-faint);font-size:14px}
+.order-summary{
+  display:none;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;
+  margin-bottom:20px;background:var(--bg-raised);border:1px solid var(--panel-border);
+  border-radius:var(--radius-m);
+}
+.order-summary.active{display:flex}
+.item-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px}
+.item-price{margin-top:2px;color:var(--moss);font-size:15px;font-weight:700}
+.clear-btn{
+  border:none;background:transparent;color:var(--ink-faint);text-decoration:underline;cursor:pointer;
+}
+
+.field-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;
+}
+.field{margin-bottom:14px}
+.field label{
+  display:block;margin-bottom:6px;color:var(--ink-dim);font-size:12.5px;font-weight:600;
+}
+.field input,.field select{
+  width:100%;padding:12px 14px;border-radius:var(--radius-s);border:1px solid var(--panel-border);
+  background:var(--bg-raised);color:var(--ink);font-size:14px;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--moss)}
+
+/* PAYMENT CHANNELS */
+.pay-methods-label{
+  display:block;margin:6px 0 10px;color:var(--ink-dim);font-size:12.5px;font-weight:600;
+}
+.pay-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-bottom:18px;
+}
+.pay-chip{
+  padding:11px 12px;border-radius:var(--radius-s);border:1px solid var(--panel-border);
+  background:var(--bg-raised);color:var(--ink-dim);cursor:pointer;text-align:left;
+  transition:.2s;display:flex;flex-direction:column;gap:3px;
+}
+.pay-chip:hover{border-color:rgba(0,162,233,.5);color:var(--ink)}
+.pay-chip.active{
+  border-color:var(--midtrans-blue);background:var(--midtrans-dim);color:var(--ink);
+}
+.pay-chip .p-title{font-weight:700;font-size:13px;color:var(--ink)}
+.pay-chip .p-sub{font-size:11px;color:var(--ink-faint)}
+
+.order-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.order-actions button{
+  flex:1;min-width:170px;padding:13.5px 16px;border-radius:var(--radius-s);cursor:pointer;font-weight:700;
+  font-size:14px;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-midtrans{
+  border:none;
+  background:linear-gradient(135deg,#00a2e9,#0077b5);
+  color:#fff;box-shadow:0 4px 18px rgba(0,162,233,.28);
+}
+.btn-midtrans:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.btn-primary{border:none;background:#25D366;color:#08110b}
+.btn-secondary{border:1px solid var(--panel-border);background:transparent;color:var(--ink)}
+
+/* TRANSACTION / INVOICE LIST */
+.tx-list{display:flex;flex-direction:column;gap:10px}
+.tx-item{
+  padding:14px 16px;border-radius:var(--radius-s);background:var(--bg-raised);
+  border:1px solid var(--panel-border);display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;font-size:13px;
+}
+.tx-badge{
+  padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;
+  background:rgba(61,220,132,.16);color:var(--moss);
+}
+
+/* COMMUNITY */
+.comm-row{display:flex;flex-wrap:wrap;gap:14px}
+.comm-card{
+  flex:1;min-width:220px;display:flex;align-items:center;gap:14px;padding:18px 20px;
+  text-decoration:none;border:1px solid var(--panel-border);border-radius:var(--radius-m);
+  background:var(--panel);transition:.2s;
+}
+.comm-card:hover{transform:translateY(-3px);border-color:var(--moss)}
+.comm-icon{
+  width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:11px;
+  background:var(--moss-dim);font-size:20px;
+}
+.ctitle{font-weight:700}
+.csub{color:var(--ink-faint);font-size:12.5px}
+
+footer{
+  padding:42px 20px 50px;text-align:center;color:var(--ink-faint);
+  border-top:1px solid var(--panel-border);font-size:13px;
+}
+
+/* MODALS */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:200;background:rgba(5,8,6,.82);
+  backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px;
+}
+.modal-backdrop.open{display:flex}
+.modal-card{
+  width:100%;max-width:450px;background:var(--panel);border:1px solid var(--panel-border);
+  border-radius:var(--radius-l);padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.6);
+  max-height:92vh;overflow-y:auto;
+}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;
+}
+.modal-head h3{font-size:20px}
+.modal-close{
+  width:32px;height:32px;border-radius:8px;border:1px solid var(--panel-border);
+  background:var(--bg-raised);color:var(--ink-dim);cursor:pointer;font-size:16px;
+}
+.preview-player-box{
+  display:flex;align-items:center;gap:14px;padding:14px;border-radius:var(--radius-m);
+  background:var(--bg-raised);border:1px solid var(--panel-border);margin-bottom:16px;
+}
+.snap-header{
+  background:linear-gradient(135deg,#002754,#00588d);margin:-24px -24px 18px;
+  padding:20px 24px;border-radius:var(--radius-l) var(--radius-l) 0 0;color:#fff;
+}
+.snap-qr-box{
+  background:#fff;color:#0b0e0c;border-radius:var(--radius-m);padding:18px;
+  text-align:center;margin:14px 0;
+}
+.snap-qr-canvas{
+  width:180px;height:180px;margin:10px auto;display:block;border:4px solid #0b0e0c;border-radius:8px;
+}
+
+.toast{
+  position:fixed;z-index:999;bottom:24px;left:50%;transform:translateX(-50%);
+  padding:12px 20px;border-radius:var(--radius-m);background:#1c211c;
+  border:1px solid var(--panel-border-strong);box-shadow:0 8px 24px rgba(0,0,0,.5);
+  font-size:13.5px;animation:toastIn .25s ease;
+}
+@keyframes toastIn{
+  from{opacity:0;transform:translate(-50%,10px)}
+  to{opacity:1;transform:translate(-50%,0)}
+}
+
+@media(max-width:600px){
+  .hero-title{font-size:34px}
+  .sec{padding:50px 16px}
+  .rung-card{padding:16px}
+  .rung-actions{width:100%;justify-content:space-between}
+}
+</style>
+</head>
+
+<body>
+
+<div class="block-field"></div>
+
+<nav>
+  <div class="nav-row">
+    <a href="#top" class="brand">
+      <span class="brand-dot"></span>
+      PlayNet
+    </a>
+
+    <div class="nav-links">
+      <a href="#client-area">Client Area</a>
+      <a href="#rank">Rank</a>
+      <a href="#kit">Kit</a>
+      <a href="#money">Money</a>
+      <a href="#refund">Refund</a>
+      <a href="#order">Order</a>
+    </div>
+
+    <div class="nav-right">
+      <button class="mc-nav-btn" id="navLoginBtn" onclick="handleNavAccountClick()">
+        <canvas id="navAvatarCanvas" class="avatar-head" width="24" height="24"></canvas>
+        <span id="navLoginText">Login Server</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header id="top">
+  <div class="status-pill">
+    <span class="live-dot"></span>
+    <span id="liveServerBadge">PlayNetwork SMP · Java + Bedrock</span>
+  </div>
+
+  <h1 class="hero-title">
+    Support <span class="accent">PlayNetwork SMP</span>
+  </h1>
+
+  <p class="hero-sub">
+    Beli rank, upgrade rank, kit, atau money in-game
+    untuk mendukung perkembangan PlayNetwork SMP.
+  </p>
+
+  <div class="hero-buttons">
+    <a class="hero-btn primary" href="#rank">Lihat Store</a>
+    <a class="hero-btn" href="#client-area">Client Area</a>
+    <a class="hero-btn" href="https://store.playnet.my.id" target="_blank" rel="noopener">
+      store.playnet.my.id
+    </a>
+  </div>
+
+  <div class="ip-row">
+    <div class="ip-box">
+      <div>
+        <span class="label">Server Address</span>
+        <span class="value">mc.playnet.my.id</span>
+      </div>
+      <button class="copy-btn" onclick="copyText('mc.playnet.my.id')">Salin</button>
+    </div>
+
+    <div class="ip-box">
+      <div>
+        <span class="label">Port Bedrock</span>
+        <span class="value">25523</span>
+      </div>
+      <button class="copy-btn" onclick="copyText('25523')">Salin</button>
+    </div>
+  </div>
+</header>
+
+<!-- CLIENT AREA (PLAYER DASHBOARD) -->
+<section class="sec sec-alt" id="client-area">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Client Area</h2>
+      <p>Kelola akun Minecraft kamu, lihat status Rank aktif, saldo Money, klaim Kit, dan riwayat pembelian.</p>
+    </div>
+
+    <div class="client-card">
+      <!-- STATE 1: BELUM LOGIN -->
+      <div class="client-guest" id="clientGuestView">
+        <canvas id="guestAvatarCanvas" class="client-guest-avatar" width="56" height="56"></canvas>
+        <h3>Masuk ke Akun Server PlayNet SMP</h3>
+        <p>
+          Gunakan Gamertag Java atau Bedrock yang kamu pakai bermain di <b>mc.playnet.my.id</b> untuk membuka Client Area.
+        </p>
+        <button type="button" class="hero-btn primary" onclick="openLoginModal()">
+          Login dengan Gamertag Minecraft
+        </button>
+      </div>
+
+      <!-- STATE 2: SUDAH LOGIN (DASHBOARD MEMBER) -->
+      <div id="clientMemberView" style="display:none">
+        <div class="client-header">
+          <div class="client-profile">
+            <canvas id="clientAvatarCanvas" class="client-avatar-lg" width="56" height="56"></canvas>
+            <div>
+              <div class="client-name-row">
+                <span class="client-gamertag" id="caGamertag">Steve</span>
+                <span class="rank-badge" id="caRankBadge">MEMBER</span>
+                <span class="platform-pill java" id="caPlatformBadge">JAVA</span>
+              </div>
+              <div class="client-sub" id="caSubInfo">Terhubung ke mc.playnet.my.id</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn-sm" onclick="openLoginModal()">Ganti Akun</button>
+            <button type="button" class="btn-sm danger" onclick="logoutMinecraft()">Keluar</button>
+          </div>
+        </div>
+
+        <div class="client-stats">
+          <div class="stat-box">
+            <div class="st-label">Rank Saat Ini</div>
+            <div class="st-val" id="caStatRank" style="color:var(--moss)">Member</div>
+            <div class="st-sub" id="caStatRankSub">Masa aktif: Permanent</div>
+          </div>
+
+          <div class="stat-box">
+            <div class="st-label">Money In Game</div>
+            <div class="st-val" id="caStatMoney" style="color:var(--gold)">0</div>
+            <div class="st-sub">Saldo tersinkronisasi</div>
+          </div>
+
+          <div class="stat-box">
+            <div class="st-label">Kit Dimiliki</div>
+            <div class="st-val" id="caStatKits" style="color:var(--diamond)">0 Kit</div>
+            <div class="st-sub">Siap diklaim di server</div>
+          </div>
+
+          <div class="stat-box">
+            <div class="st-label">Total Transaksi</div>
+            <div class="st-val" id="caStatTx">0</div>
+            <div class="st-sub">Pembelian selesai</div>
+          </div>
+        </div>
+
+        <div class="client-tabs">
+          <button type="button" class="client-tab active" onclick="switchClientTab('ca-pane-rank', this)">
+            Status Rank &amp; Perks
+          </button>
+          <button type="button" class="client-tab" onclick="switchClientTab('ca-pane-kits', this)">
+            Kit Saya
+          </button>
+          <button type="button" class="client-tab" onclick="switchClientTab('ca-pane-invoices', this)">
+            Riwayat Transaksi
+          </button>
+        </div>
+
+        <!-- PANE 1: STATUS RANK & PERKS -->
+        <div class="client-pane active" id="ca-pane-rank">
+          <div class="perks-box">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+              <div>
+                <h4 style="font-size:17px" id="caPerkTitle">Rank Aktif: Member (Default)</h4>
+                <p style="font-size:13px;color:var(--ink-dim)" id="caPerkDesc">
+                  Pilih rank di katalog bawah untuk menikmati akses fitur eksklusif di server mc.playnet.my.id.
+                </p>
+              </div>
+              <a href="#rank" class="btn-sm primary" style="text-decoration:none">Upgrade Rank</a>
+            </div>
+
+            <div class="perks-list" id="caPerksList"></div>
+          </div>
+        </div>
+
+        <!-- PANE 2: KIT SAYA -->
+        <div class="client-pane" id="ca-pane-kits">
+          <div id="caKitsEmpty" class="perks-box" style="text-align:center;color:var(--ink-faint);font-size:13.5px">
+            Belum ada Kit yang dibeli. Pilih Kit di bagian <a href="#kit" style="color:var(--moss)">Kit Only</a> atau beli Rank untuk mendapatkan akses kit.
+          </div>
+          <div class="my-kits-grid" id="caKitsGrid"></div>
+        </div>
+
+        <!-- PANE 3: RIWAYAT INVOICE -->
+        <div class="client-pane" id="ca-pane-invoices">
+          <div id="caInvoicesEmpty" class="perks-box" style="text-align:center;color:var(--ink-faint);font-size:13.5px">
+            Belum ada riwayat transaksi untuk akun ini.
+          </div>
+          <div class="tx-list" id="caInvoiceList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Main di PlayNet SMP</h2>
+      <p>Java dan Bedrock bisa bermain bersama di satu server.</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <h3 style="color:var(--diamond)">Java Edition</h3>
+        <p>Multiplayer → Add Server → masukkan <b>mc.playnet.my.id</b>.</p>
+      </div>
+
+      <div class="info-card">
+        <h3 style="color:var(--emerald)">Bedrock Edition</h3>
+        <p>Add Server → address <b>mc.playnet.my.id</b>, port <b>25523</b>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="rank">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Buy Rank</h2>
+      <p>
+        Mau beli, upgrade, atau cuma lihat-lihat?
+        Kamu juga bisa langsung buka <b>store.playnet.my.id</b>.
+      </p>
+    </div>
+
+    <div class="ladder" id="rankLadder"></div>
+  </div>
+</section>
+
+<section class="sec" id="kit">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Kit Only?</h2>
+      <p>Butuh kit tanpa membeli rank? Pilih kit yang kamu inginkan.</p>
+    </div>
+
+    <div class="kit-grid" id="kitGrid"></div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="money">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Money In Game</h2>
+      <p>Rp1.000 mendapatkan <b>50.000 money in-game</b>.</p>
+    </div>
+
+    <div class="converter">
+      <div class="rate-line">
+        Rp1.000 = <b>50.000 Money</b>
+      </div>
+
+      <div class="stepper">
+        <button class="step-btn" onclick="changeMoney(-1)">−</button>
+
+        <div class="amount-display">
+          <div class="amt" id="moneyAmount">50.000</div>
+          <div class="unit">Money In Game</div>
+        </div>
+
+        <button class="step-btn" onclick="changeMoney(1)">+</button>
+      </div>
+
+      <div class="price-out">
+        <div class="label">Harga</div>
+        <div class="value" id="moneyPrice">Rp1.000</div>
+      </div>
+
+      <div class="cta-row">
+        <button onclick="selectMoneyOrder()">Pilih Money</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="refund">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Refund / Pengembalian Dana</h2>
+      <p>Persyaratan refund pembelian PlayNetwork SMP.</p>
+    </div>
+
+    <div class="refund-grid">
+      <div class="refund-card">
+        <h3 style="color:var(--moss)">Money In Game</h3>
+        <ul>
+          <li>Refund dilakukan sebelum 1 hari sejak pembelian.</li>
+          <li>Harus melakukan refund seluruh money yang dibeli.</li>
+          <li>Money di akun harus masih cukup untuk melakukan refund.</li>
+        </ul>
+      </div>
+
+      <div class="refund-card">
+        <h3 style="color:var(--gold)">Rank</h3>
+        <ul>
+          <li>Rank yang sudah diproses tidak dapat direfund.</li>
+          <li>Refund dapat dilakukan jika order masih sementara atau belum diproses.</li>
+          <li>Player dapat membatalkan order sebelum rank diberikan apabila berubah pikiran.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="order">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Order Kamu</h2>
+      <p>Pilih rank, kit, atau money terlebih dahulu lalu selesaikan pembayaran via Midtrans atau WhatsApp.</p>
+    </div>
+
+    <div class="order-box">
+      <div class="order-empty" id="orderEmpty">
+        Belum ada item dipilih.
+      </div>
+
+      <div class="order-summary" id="orderSummary">
+        <div>
+          <div class="item-name" id="sumName">—</div>
+          <div class="item-price" id="sumPrice">—</div>
+        </div>
+
+        <button class="clear-btn" onclick="clearOrder()">Ganti</button>
+      </div>
+
+      <div id="orderForm" style="display:none">
+        <div class="field-grid">
+          <div class="field">
+            <label for="gamertag">Gamertag</label>
+            <input type="text" id="gamertag" placeholder="Contoh: Steve_Builder" oninput="syncGamertagInput()">
+          </div>
+
+          <div class="field">
+            <label for="platform">Platform</label>
+            <select id="platform" onchange="syncGamertagInput()">
+              <option value="Java">Java</option>
+              <option value="Bedrock">Bedrock</option>
+            </select>
+          </div>
+        </div>
+
+        <span class="pay-methods-label">Metode Pembayaran Midtrans</span>
+        <div class="pay-grid" id="payMethodGrid">
+          <button type="button" class="pay-chip active" onclick="selectPayMethod('QRIS', this)">
+            <span class="p-title">QRIS</span>
+            <span class="p-sub">GoPay, DANA, OVO, Bank</span>
+          </button>
+          <button type="button" class="pay-chip" onclick="selectPayMethod('GOPAY', this)">
+            <span class="p-title">GoPay / DANA</span>
+            <span class="p-sub">E-Wallet Instan</span>
+          </button>
+          <button type="button" class="pay-chip" onclick="selectPayMethod('SHOPEEPAY', this)">
+            <span class="p-title">ShopeePay</span>
+            <span class="p-sub">Aplikasi Shopee</span>
+          </button>
+          <button type="button" class="pay-chip" onclick="selectPayMethod('VA_BANK', this)">
+            <span class="p-title">Virtual Account</span>
+            <span class="p-sub">BCA, BRI, Mandiri, BNI</span>
+          </button>
+        </div>
+
+        <div class="order-actions">
+          <button type="button" class="btn-midtrans" id="payMidtransBtn" onclick="payWithMidtrans()">
+            Bayar dengan Midtrans
+          </button>
+          <button type="button" class="btn-primary" onclick="sendOrder()">
+            Kirim via WhatsApp
+          </button>
+          <button type="button" class="btn-secondary" onclick="copyOrder()">
+            Salin Pesan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="community">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Community</h2>
+      <p>
+        Gabung untuk update event, giveaway, maintenance,
+        dan informasi terbaru PlayNetwork SMP.
+      </p>
+    </div>
+
+    <div class="comm-row">
+      <a
+        class="comm-card"
+        href="https://chat.whatsapp.com/LTjuB0G0I7B9AnI6IT2tVq?s=cl&p=a&mlu=4&ilr=4"
+        target="_blank"
+        rel="noopener"
+      >
+        <div class="comm-icon">💬</div>
+
+        <div>
+          <div class="ctitle">WhatsApp Community</div>
+          <div class="csub">Join komunitas PlayNetwork.</div>
+        </div>
+      </a>
+
+      <a
+        class="comm-card"
+        href="https://store.playnet.my.id"
+        target="_blank"
+        rel="noopener"
+      >
+        <div class="comm-icon">🛒</div>
+
+        <div>
+          <div class="ctitle">PlayNet Store</div>
+          <div class="csub">store.playnet.my.id</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 PlayNetwork SMP
+  <br>
+  Java + Bedrock Survival Economy
+</footer>
+
+<!-- MODAL 1: LOGIN MINECRAFT SERVER -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Login Server PlayNet SMP</h3>
+      <button type="button" class="modal-close" onclick="closeLoginModal()">✕</button>
+    </div>
+
+    <div class="preview-player-box">
+      <canvas id="modalAvatarCanvas" class="client-avatar-lg" width="48" height="48"></canvas>
+      <div>
+        <div style="font-size:11px;color:var(--ink-faint);text-transform:uppercase">Akun Karakter</div>
+        <div style="font-weight:700;font-family:'Space Grotesk',sans-serif;font-size:16px" id="modalPreviewName">Steve_Builder</div>
+        <div style="font-size:12px;color:var(--moss)" id="modalPreviewServer">mc.playnet.my.id · Java Edition</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="loginPlatform">Platform</label>
+      <select id="loginPlatform" onchange="updateLoginModalPreview()">
+        <option value="Java">Java Edition (mc.playnet.my.id)</option>
+        <option value="Bedrock">Bedrock Edition (Port 25523)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="loginGamertag">Gamertag Minecraft</label>
+      <input type="text" id="loginGamertag" placeholder="Masukkan Gamertag kamu" oninput="updateLoginModalPreview()">
+    </div>
+
+    <div class="field" id="bedrockPrefixRow" style="display:none">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500">
+        <input type="checkbox" id="floodgatePrefix" checked onchange="updateLoginModalPreview()" style="width:16px;height:16px">
+        <span>Gunakan titik Bedrock otomatis (<code>.Gamertag</code>)</span>
+      </label>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button type="button" class="btn-sm primary" style="flex:1;padding:12px;font-size:14px" onclick="submitMinecraftLogin()">
+        Masuk ke Client Area
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 2: MIDTRANS SNAP PAYMENT GATEWAY -->
+<div class="modal-backdrop" id="midtransModal">
+  <div class="modal-card">
+    <div class="snap-header">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:11px;opacity:.85;text-transform:uppercase;letter-spacing:.06em">Midtrans Payment</div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700">PlayNetwork SMP Store</div>
+        </div>
+        <button type="button" class="modal-close" style="background:rgba(255,255,255,.15);color:#fff;border:none" onclick="closeMidtransModal()">✕</button>
+      </div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.15);display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:12.5px;opacity:.9" id="snapOrderId">Order #PN-000000</span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#3ddc84" id="snapTotalAmount">Rp0</span>
+      </div>
+    </div>
+
+    <div id="snapPaymentBody">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+        <span style="color:var(--ink-dim)">Produk:</span>
+        <b id="snapItemLabel">—</b>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+        <span style="color:var(--ink-dim)">Penerima:</span>
+        <b id="snapPlayerLabel" style="color:var(--moss)">—</b>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px">
+        <span style="color:var(--ink-dim)">Metode:</span>
+        <b id="snapMethodLabel">QRIS</b>
+      </div>
+
+      <div class="snap-qr-box">
+        <div style="font-weight:700;font-size:13px;letter-spacing:.04em" id="snapBoxHeading">SCAN QRIS MIDTRANS</div>
+        <canvas id="qrisCanvas" class="snap-qr-canvas" width="180" height="180"></canvas>
+        <div style="font-size:11.5px;color:#4a524a" id="snapPaymentInstruction">
+          Scan menggunakan GoPay, DANA, OVO, ShopeePay, atau Mobile Banking.
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+        <button type="button" class="btn-midtrans" style="flex:1;padding:12.5px;border-radius:10px;font-weight:700;cursor:pointer" onclick="confirmMidtransPayment()">
+          Konfirmasi &amp; Cek Status Pembayaran
+        </button>
+      </div>
+    </div>
+
+    <div id="snapSuccessBody" style="display:none;text-align:center;padding:12px 0">
+      <div style="width:54px;height:54px;border-radius:50%;background:var(--moss-dim);color:var(--moss);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px">
+        ✓
+      </div>
+      <h4 style="font-size:19px;margin-bottom:6px">Pembayaran Berhasil!</h4>
+      <p style="font-size:13.5px;color:var(--ink-dim);margin-bottom:16px" id="snapSuccessDesc">
+        Item telah ditambahkan ke akun kamu dan siap digunakan di server <b>mc.playnet.my.id</b>.
+      </p>
+      <div style="display:flex;gap:10px">
+        <button type="button" class="btn-sm primary" style="flex:1;padding:12px" onclick="goToClientAreaAfterPay()">
+          Lihat di Client Area
+        </button>
+        <button type="button" class="btn-sm" style="flex:1;padding:12px" onclick="closeMidtransModal()">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_NUMBER = "6281527114843";
+
+const rankData = [
+  {
+    name:"Warrior",
+    price:5000,
+    color:"var(--iron)",
+    perks:["Prefix [Warrior] di Chat & Tab","Akses /kit warrior","Sethome hingga 3 lokasi","Akses /workbench"]
+  },
+  {
+    name:"Slayer",
+    price:10000,
+    color:"var(--gold)",
+    perks:["Prefix [Slayer] di Chat & Tab","Akses /kit slayer","Sethome hingga 5 lokasi","Akses /enderchest & /workbench"]
+  },
+  {
+    name:"Elite",
+    price:20000,
+    color:"var(--diamond)",
+    perks:["Prefix [Elite] di Chat & Tab","Akses /kit elite","Sethome hingga 8 lokasi","Akses /hat, /enderchest & /feed"]
+  },
+  {
+    name:"Emperor",
+    price:35000,
+    color:"var(--emerald)",
+    perks:["Prefix [Emperor] di Chat & Tab","Akses /kit emperor","Sethome hingga 12 lokasi","Akses /fly di Lobby & /heal"]
+  },
+  {
+    name:"Lord",
+    price:50000,
+    color:"var(--amethyst)",
+    perks:["Prefix [Lord] di Chat & Tab","Akses /kit lord","Sethome hingga 16 lokasi","Akses /repair & /nick warna"]
+  },
+  {
+    name:"Overlord",
+    price:75000,
+    color:"var(--netherite)",
+    perks:["Prefix [Overlord] di Chat & Tab","Akses /kit overlord","Sethome hingga 25 lokasi","Akses /fly di Claim & /repair all"]
+  },
+  {
+    name:"Mythic",
+    price:120000,
+    color:"var(--danger)",
+    perks:["Prefix [Mythic] Eksklusif","Akses /kit mythic","Sethome hingga 40 lokasi","Akses /fly Survival, /anvil & /heal"]
+  },
+  {
+    name:"Celestial",
+    price:250000,
+    color:"var(--celestial-b)",
+    celestial:true,
+    perks:["Prefix Gradient [Celestial]","Akses Semua Kit & /kit celestial","Unlimited Sethome & Vault","Full Akses /fly, /god, /repair all & Priority Queue"]
+  }
+];
+
+const kitData = [
+  {name:"Emperor",price:5000,color:"var(--emerald)"},
+  {name:"Lord",price:8500,color:"var(--amethyst)"},
+  {name:"Overlord",price:10000,color:"var(--netherite)"},
+  {name:"Mythic",price:11500,color:"var(--danger)"},
+  {name:"Celestial",price:16000,color:"var(--celestial-b)"}
+];
+
+const PAY_CHANNEL_LABELS = {
+  QRIS: "QRIS (GoPay, DANA, OVO, ShopeePay, m-Banking)",
+  GOPAY: "GoPay / DANA",
+  SHOPEEPAY: "ShopeePay",
+  VA_BANK: "Virtual Account Bank"
+};
+
+let currentOrder = null;
+let moneySteps = 1;
+const MONEY_PER_STEP = 50000;
+const PRICE_PER_STEP = 1000;
+
+let selectedPayChannel = {
+  code: "QRIS",
+  label: PAY_CHANNEL_LABELS.QRIS
+};
+
+let mcSession = null;
+let activeSnapTx = null;
+
+function safeGetStorage(key){
+  try{
+    return localStorage.getItem(key);
+  }catch(e){
+    return null;
+  }
+}
+
+function safeSetStorage(key, value){
+  try{
+    localStorage.setItem(key, value);
+  }catch(e){}
+}
+
+function safeRemoveStorage(key){
+  try{
+    localStorage.removeItem(key);
+  }catch(e){}
+}
+
+function rupiah(number){
+  return new Intl.NumberFormat(
+    "id-ID",
+    {
+      style:"currency",
+      currency:"IDR",
+      maximumFractionDigits:0
+    }
+  ).format(number);
+}
+
+function numberFormat(number){
+  return new Intl.NumberFormat("id-ID").format(number);
+}
+
+function drawMinecraftHead(canvasId, username){
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.imageSmoothingEnabled = false;
+
+  const clean = (username || "Steve").trim();
+  let hash = 0;
+  for(let i = 0; i < clean.length; i++){
+    hash = clean.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const skinTones = ["#d69c72", "#c68652", "#e0ac8b", "#8d5524", "#b87a52"];
+  const hairColors = ["#3b2716", "#1c1c1c", "#6e3219", "#d4a338", "#215c42", "#4e2a6e", "#1b4d7e"];
+  const eyeColors = ["#3b5998", "#2b8a3e", "#5c3c92", "#1f2421", "#008b8b"];
+
+  const skin = skinTones[Math.abs(hash) % skinTones.length];
+  const hair = hairColors[Math.abs(hash >> 3) % hairColors.length];
+  const eye = eyeColors[Math.abs(hash >> 6) % eyeColors.length];
+
+  const px = w / 8;
+  const py = h / 8;
+
+  ctx.fillStyle = skin;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.fillStyle = hair;
+  ctx.fillRect(0, 0, w, py * 2);
+  ctx.fillRect(0, py * 2, px, py * 2);
+  ctx.fillRect(w - px, py * 2, px, py * 2);
+  if(Math.abs(hash) % 2 === 0){
+    ctx.fillRect(px * 2, py * 2, px * 2, py);
+  }
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(px * 1, py * 4, px * 1, py * 1);
+  ctx.fillRect(px * 6, py * 4, px * 1, py * 1);
+  ctx.fillStyle = eye;
+  ctx.fillRect(px * 2, py * 4, px * 1, py * 1);
+  ctx.fillRect(px * 5, py * 4, px * 1, py * 1);
+
+  ctx.fillStyle = "#7a4928";
+  ctx.fillRect(px * 3, py * 5, px * 2, py * 1);
+  ctx.fillStyle = "#593118";
+  ctx.fillRect(px * 2, py * 6, px * 4, py * 1);
+}
+
+async function checkServerStatus(){
+  const badge = document.getElementById("liveServerBadge");
+  try{
+    const res = await fetch("https://api.mcsrvstat.us/3/mc.playnet.my.id");
+    if(!res.ok) return;
+    const data = await res.json();
+    if(data && data.online){
+      const onlineCount = data.players && typeof data.players.online === "number" ? data.players.online : 0;
+      const maxCount = data.players && typeof data.players.max === "number" ? data.players.max : 100;
+      badge.textContent = `PlayNetwork SMP · Java + Bedrock (${onlineCount}/${maxCount} Online)`;
+    }
+  }catch(e){}
+}
+
+/* ACCOUNT STORAGE HELPERS PER PLAYER */
+function getAccountStoreKey(gamertag){
+  return "playnet_account_" + (gamertag || "default").toLowerCase();
+}
+
+function loadPlayerProfile(gamertag, platform){
+  const raw = safeGetStorage(getAccountStoreKey(gamertag));
+  if(raw){
+    try{
+      const parsed = JSON.parse(raw);
+      parsed.platform = platform || parsed.platform || "Java";
+      return parsed;
+    }catch(e){}
+  }
+  return {
+    rawGamertag: gamertag.replace(/^\./, ""),
+    gamertag: gamertag,
+    platform: platform || "Java",
+    activeRank: null,
+    moneyBalance: 0,
+    kits: [],
+    invoices: []
+  };
+}
+
+function saveCurrentPlayerProfile(){
+  if(!mcSession) return;
+  safeSetStorage(getAccountStoreKey(mcSession.gamertag), JSON.stringify(mcSession));
+  safeSetStorage("playnet_mc_session", JSON.stringify(mcSession));
+}
+
+function handleNavAccountClick(){
+  if(mcSession){
+    document.getElementById("client-area").scrollIntoView({behavior:"smooth"});
+  }else{
+    openLoginModal();
+  }
+}
+
+function openLoginModal(){
+  const modal = document.getElementById("loginModal");
+  modal.classList.add("open");
+  const currentInput = document.getElementById("gamertag").value.trim();
+  if(mcSession){
+    document.getElementById("loginGamertag").value = mcSession.rawGamertag;
+    document.getElementById("loginPlatform").value = mcSession.platform;
+  }else if(currentInput){
+    document.getElementById("loginGamertag").value = currentInput;
+  }
+  updateLoginModalPreview();
+}
+
+function closeLoginModal(){
+  document.getElementById("loginModal").classList.remove("open");
+}
+
+function updateLoginModalPreview(){
+  const platform = document.getElementById("loginPlatform").value;
+  const rawName = document.getElementById("loginGamertag").value.trim() || "Steve_Builder";
+  const prefixBox = document.getElementById("bedrockPrefixRow");
+  const usePrefix = document.getElementById("floodgatePrefix").checked;
+
+  prefixBox.style.display = platform === "Bedrock" ? "block" : "none";
+
+  let formattedName = rawName;
+  if(platform === "Bedrock" && usePrefix && !rawName.startsWith(".")){
+    formattedName = "." + rawName;
+  }
+
+  document.getElementById("modalPreviewName").textContent = formattedName;
+  document.getElementById("modalPreviewServer").textContent =
+    platform === "Bedrock"
+      ? "mc.playnet.my.id:25523 · Bedrock Edition"
+      : "mc.playnet.my.id · Java Edition";
+
+  drawMinecraftHead("modalAvatarCanvas", rawName);
+}
+
+function submitMinecraftLogin(){
+  const rawGamertag = document.getElementById("loginGamertag").value.trim();
+  const platform = document.getElementById("loginPlatform").value;
+  const usePrefix = document.getElementById("floodgatePrefix").checked;
+
+  if(!rawGamertag || rawGamertag.length < 3){
+    showToast("Masukkan Gamertag Minecraft minimal 3 karakter.");
+    return;
+  }
+
+  let finalGamertag = rawGamertag;
+  if(platform === "Bedrock" && usePrefix && !rawGamertag.startsWith(".")){
+    finalGamertag = "." + rawGamertag;
+  }
+
+  mcSession = loadPlayerProfile(finalGamertag, platform);
+  mcSession.rawGamertag = rawGamertag.replace(/^\./, "");
+  mcSession.gamertag = finalGamertag;
+  mcSession.platform = platform;
+
+  saveCurrentPlayerProfile();
+  renderAllAccountState();
+  closeLoginModal();
+  showToast(`Selamat datang di Client Area, ${mcSession.gamertag}!`);
+}
+
+function logoutMinecraft(){
+  mcSession = null;
+  safeRemoveStorage("playnet_mc_session");
+  renderAllAccountState();
+  showToast("Berhasil keluar dari Client Area.");
+}
+
+function switchClientTab(paneId, btnEl){
+  document.querySelectorAll(".client-pane").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".client-tab").forEach(b => b.classList.remove("active"));
+  const target = document.getElementById(paneId);
+  if(target) target.classList.add("active");
+  if(btnEl) btnEl.classList.add("active");
+}
+
+function claimKitToServer(idx){
+  if(!mcSession || !mcSession.kits || !mcSession.kits[idx]) return;
+  const kitObj = mcSession.kits[idx];
+  kitObj.claimed = true;
+  kitObj.claimedAt = new Date().toLocaleTimeString("id-ID", {hour:"2-digit", minute:"2-digit"});
+  saveCurrentPlayerProfile();
+  renderAllAccountState();
+
+  // Trigger background RCON delivery if available
+  try{
+    const endpoint = `${window.location.origin}/api/rcon-deliver`;
+    fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        gamertag: mcSession.gamertag,
+        platform: mcSession.platform,
+        itemType: "Kit",
+        itemName: kitObj.name
+      })
+    }).catch(()=>{});
+  }catch(e){}
+
+  showToast(`${kitObj.name} berhasil dikirim ke karakter ${mcSession.gamertag} di server!`);
+}
+
+function renderAllAccountState(){
+  const navBtn = document.getElementById("navLoginBtn");
+  const navText = document.getElementById("navLoginText");
+  const guestView = document.getElementById("clientGuestView");
+  const memberView = document.getElementById("clientMemberView");
+
+  drawMinecraftHead("guestAvatarCanvas", "Steve");
+
+  if(!mcSession){
+    navBtn.classList.remove("logged-in");
+    navText.textContent = "Login Server";
+    drawMinecraftHead("navAvatarCanvas", "Steve");
+    guestView.style.display = "block";
+    memberView.style.display = "none";
+    renderRanks();
+    return;
+  }
+
+  // Navbar
+  navBtn.classList.add("logged-in");
+  const rankShort = mcSession.activeRank ? mcSession.activeRank : "Member";
+  navText.innerHTML = `${mcSession.gamertag} <span class="platform-pill ${mcSession.platform.toLowerCase()}">${rankShort}</span>`;
+  drawMinecraftHead("navAvatarCanvas", mcSession.rawGamertag);
+
+  // Client Area Member View
+  guestView.style.display = "none";
+  memberView.style.display = "block";
+  drawMinecraftHead("clientAvatarCanvas", mcSession.rawGamertag);
+
+  document.getElementById("caGamertag").textContent = mcSession.gamertag;
+  const pfBadge = document.getElementById("caPlatformBadge");
+  pfBadge.textContent = mcSession.platform;
+  pfBadge.className = "platform-pill " + mcSession.platform.toLowerCase();
+
+  const matchedRank = rankData.find(r => r.name === mcSession.activeRank);
+  const rankBadge = document.getElementById("caRankBadge");
+  const statRank = document.getElementById("caStatRank");
+
+  if(matchedRank){
+    rankBadge.textContent = matchedRank.name;
+    rankBadge.style.background = matchedRank.color;
+    statRank.textContent = matchedRank.name;
+    statRank.style.color = matchedRank.color;
+    document.getElementById("caPerkTitle").textContent = `Rank Aktif: ${matchedRank.name} (Permanent)`;
+    document.getElementById("caPerkDesc").textContent = `Seluruh hak akses dan command rank ${matchedRank.name} telah aktif untuk ${mcSession.gamertag} di mc.playnet.my.id.`;
+  }else{
+    rankBadge.textContent = "MEMBER";
+    rankBadge.style.background = "var(--iron)";
+    statRank.textContent = "Member";
+    statRank.style.color = "var(--ink)";
+    document.getElementById("caPerkTitle").textContent = "Rank Aktif: Member (Default)";
+    document.getElementById("caPerkDesc").textContent = "Kamu belum memiliki rank khusus. Pilih rank di bawah untuk membuka fitur eksklusif di server.";
+  }
+
+  document.getElementById("caSubInfo").textContent =
+    mcSession.platform === "Bedrock"
+      ? "mc.playnet.my.id · Port 25523 (Bedrock Edition)"
+      : "mc.playnet.my.id · Java Edition";
+
+  document.getElementById("caStatMoney").textContent = numberFormat(mcSession.moneyBalance || 0);
+  const kitsArr = mcSession.kits || [];
+  document.getElementById("caStatKits").textContent = `${kitsArr.length} Kit`;
+  const invArr = mcSession.invoices || [];
+  document.getElementById("caStatTx").textContent = String(invArr.length);
+
+  // Render Perks List
+  const perksContainer = document.getElementById("caPerksList");
+  perksContainer.innerHTML = "";
+  const perksToShow = matchedRank
+    ? matchedRank.perks
+    : ["Akses Survival & Economy Dasar","Sethome 1 lokasi (/sethome)","Akses /spawn & /tpa","Bisa upgrade ke Rank kapan saja"];
+  perksToShow.forEach(pk => {
+    const div = document.createElement("div");
+    div.className = "perk-item";
+    div.innerHTML = `<span style="color:var(--moss);font-weight:700">✓</span> <span>${pk}</span>`;
+    perksContainer.appendChild(div);
+  });
+
+  // Render Owned Kits
+  const kitsEmpty = document.getElementById("caKitsEmpty");
+  const kitsGrid = document.getElementById("caKitsGrid");
+  kitsGrid.innerHTML = "";
+  if(kitsArr.length === 0){
+    kitsEmpty.style.display = "block";
+  }else{
+    kitsEmpty.style.display = "none";
+    kitsArr.forEach((k, idx) => {
+      const card = document.createElement("div");
+      card.className = "owned-kit-card";
+      card.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <b style="font-family:'Space Grotesk',sans-serif;font-size:15px">${k.name}</b>
+          <span class="tx-badge">${k.claimed ? "Terkirim" : "Siap Klaim"}</span>
+        </div>
+        <div style="font-size:12px;color:var(--ink-faint)">
+          Dibeli: ${k.date} · Penerima: ${mcSession.gamertag}
+        </div>
+        <button type="button" class="btn-sm ${k.claimed ? "" : "primary"}" onclick="claimKitToServer(${idx})">
+          ${k.claimed ? "Kirim Ulang ke Server" : "Klaim ke In-Game"}
+        </button>
+      `;
+      kitsGrid.appendChild(card);
+    });
+  }
+
+  // Render Invoices
+  const invEmpty = document.getElementById("caInvoicesEmpty");
+  const invList = document.getElementById("caInvoiceList");
+  invList.innerHTML = "";
+  if(invArr.length === 0){
+    invEmpty.style.display = "block";
+  }else{
+    invEmpty.style.display = "none";
+    invArr.forEach(inv => {
+      const item = document.createElement("div");
+      item.className = "tx-item";
+      item.innerHTML = `
+        <div>
+          <div style="font-weight:700">${inv.item} <span style="color:var(--moss)">(${inv.price})</span></div>
+          <div style="font-size:12px;color:var(--ink-faint)">
+            Invoice <code>${inv.orderId}</code> · ${inv.method} · ${inv.time}
+          </div>
+        </div>
+        <span class="tx-badge">LUNAS</span>
+      `;
+      invList.appendChild(item);
+    });
+  }
+
+  // Sync checkout form inputs
+  document.getElementById("gamertag").value = mcSession.gamertag;
+  document.getElementById("platform").value = mcSession.platform;
+
+  renderRanks();
+}
+
+function syncGamertagInput(){
+  const gt = document.getElementById("gamertag").value.trim();
+  const pf = document.getElementById("platform").value;
+  if(gt){
+    drawMinecraftHead("navAvatarCanvas", gt);
+  }
+  if(mcSession && gt){
+    mcSession.gamertag = gt;
+    mcSession.platform = pf;
+  }
+}
+
+/* RENDER STORE CATALOG */
+function renderRanks(){
+  const ladder = document.getElementById("rankLadder");
+  ladder.innerHTML = "";
+
+  const ownedRankName = mcSession ? mcSession.activeRank : null;
+
+  rankData.forEach((rank,index)=>{
+    const isOwned = ownedRankName === rank.name;
+    const rung = document.createElement("div");
+    rung.className = "rung";
+
+    rung.innerHTML = `
+      <div class="stem">
+        <div
+          class="node"
+          style="
+            background:${rank.color};
+            box-shadow:
+              0 0 0 4px var(--bg),
+              0 0 18px ${rank.color};
+          "
+        >
+          ${index + 1}
+        </div>
+      </div>
+
+      <div
+        class="rung-card ${rank.celestial ? "celestial" : ""} ${isOwned ? "owned-rank" : ""}"
+        style="--tier-color:${rank.color}"
+      >
+        <div>
+          <div class="rung-name">
+            ${rank.name}
+            ${isOwned ? '<span class="owned-pill">Rank Kamu Saat Ini</span>' : ''}
+          </div>
+          <div class="rung-desc">Permanent Server Rank</div>
+        </div>
+
+        <div class="rung-actions">
+          <div class="rung-price">${rupiah(rank.price)}</div>
+
+          <button
+            class="pick-btn ${isOwned ? "active-owned" : ""}"
+            onclick="selectOrder('Rank','${rank.name}',${rank.price})"
+          >
+            ${isOwned ? "Aktif" : "Pilih"}
+          </button>
+        </div>
+      </div>
+    `;
+
+    ladder.appendChild(rung);
+  });
+}
+
+function renderKits(){
+  const grid = document.getElementById("kitGrid");
+  grid.innerHTML = "";
+
+  kitData.forEach(kit=>{
+    const card = document.createElement("div");
+    card.className = "kit-card";
+
+    card.innerHTML = `
+      <div class="kit-name">
+        <span
+          class="swatch"
+          style="background:${kit.color}"
+        ></span>
+
+        ${kit.name} Kit
+      </div>
+
+      <div
+        class="kit-price"
+        style="color:${kit.color}"
+      >
+        ${rupiah(kit.price)}
+      </div>
+
+      <div class="kit-note">
+        Kit only · tanpa rank permanen
+      </div>
+
+      <button
+        onclick="selectOrder('Kit','${kit.name} Kit',${kit.price})"
+      >
+        Pilih Kit
+      </button>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+function changeMoney(change){
+  moneySteps += change;
+  if(moneySteps < 1){
+    moneySteps = 1;
+  }
+  updateMoney();
+}
+
+function updateMoney(){
+  const money = moneySteps * MONEY_PER_STEP;
+  const price = moneySteps * PRICE_PER_STEP;
+
+  document.getElementById("moneyAmount").textContent = numberFormat(money);
+  document.getElementById("moneyPrice").textContent = rupiah(price);
+}
+
+function selectMoneyOrder(){
+  const money = moneySteps * MONEY_PER_STEP;
+  const price = moneySteps * PRICE_PER_STEP;
+
+  selectOrder(
+    "Money In Game",
+    `${numberFormat(money)} Money`,
+    price
+  );
+}
+
+function selectOrder(type,name,price){
+  currentOrder = {
+    type,
+    name,
+    price,
+    moneySteps: type === "Money In Game" ? moneySteps : 1
+  };
+
+  document.getElementById("orderEmpty").style.display = "none";
+  document.getElementById("orderSummary").classList.add("active");
+  document.getElementById("orderForm").style.display = "block";
+
+  document.getElementById("sumName").textContent = `${type} · ${name}`;
+  document.getElementById("sumPrice").textContent = rupiah(price);
+
+  if(mcSession){
+    document.getElementById("gamertag").value = mcSession.gamertag;
+    document.getElementById("platform").value = mcSession.platform;
+  }
+
+  document.getElementById("order").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function clearOrder(){
+  currentOrder = null;
+  document.getElementById("orderEmpty").style.display = "block";
+  document.getElementById("orderSummary").classList.remove("active");
+  document.getElementById("orderForm").style.display = "none";
+}
+
+function selectPayMethod(code, btnEl){
+  selectedPayChannel = { code, label: PAY_CHANNEL_LABELS[code] || code };
+  const chips = document.querySelectorAll("#payMethodGrid .pay-chip");
+  chips.forEach(c => c.classList.remove("active"));
+  if(btnEl) btnEl.classList.add("active");
+}
+
+/* MIDTRANS SNAP INTEGRATION */
+function loadSnapScriptDynamic(clientKey, isProduction){
+  return new Promise((resolve)=>{
+    if(window.snap){
+      resolve(true);
+      return;
+    }
+    if(!clientKey){
+      resolve(false);
+      return;
+    }
+    const existing = document.getElementById("midtrans-snap-script");
+    if(existing) existing.remove();
+
+    const script = document.createElement("script");
+    script.id = "midtrans-snap-script";
+    script.src = isProduction
+      ? "https://app.midtrans.com/snap/snap.js"
+      : "https://app.sandbox.midtrans.com/snap/snap.js";
+    script.setAttribute("data-client-key", clientKey);
+    script.onload = () => resolve(Boolean(window.snap));
+    script.onerror = () => resolve(false);
+    document.head.appendChild(script);
+  });
+}
+
+async function payWithMidtrans(){
+  if(!currentOrder){
+    showToast("Pilih item terlebih dahulu.");
+    return;
+  }
+
+  const gamertag = document.getElementById("gamertag").value.trim();
+  const platform = document.getElementById("platform").value;
+
+  if(!gamertag){
+    showToast("Masukkan Gamertag Minecraft kamu terlebih dahulu.");
+    openLoginModal();
+    return;
+  }
+
+  if(!mcSession || mcSession.gamertag !== gamertag){
+    mcSession = loadPlayerProfile(gamertag, platform);
+    mcSession.rawGamertag = gamertag.replace(/^\./, "");
+    mcSession.gamertag = gamertag;
+    mcSession.platform = platform;
+    saveCurrentPlayerProfile();
+    renderAllAccountState();
+  }
+
+  const btn = document.getElementById("payMidtransBtn");
+  const originalText = btn.textContent;
+  btn.textContent = "Memproses...";
+  btn.disabled = true;
+
+  try{
+    const endpoint = `${window.location.origin}/api/create-transaction`;
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        itemType: currentOrder.type,
+        itemName: currentOrder.name,
+        moneySteps: currentOrder.moneySteps,
+        gamertag,
+        platform
+      })
+    });
+
+    if(response.ok){
+      const data = await response.json();
+      if(data && data.token){
+        const hasSnap = await loadSnapScriptDynamic(data.client_key, data.is_production);
+        if(hasSnap && window.snap){
+          btn.textContent = originalText;
+          btn.disabled = false;
+          window.snap.pay(data.token, {
+            onSuccess: function(){
+              applyPurchaseToAccount(data.order_id, gamertag, platform);
+            },
+            onPending: function(){
+              showToast("Menunggu pembayaran diselesaikan.");
+            },
+            onError: function(){
+              showToast("Pembayaran dibatalkan.");
+            }
+          });
+          return;
+        }
+      }
+    }
+  }catch(e){}
+
+  btn.textContent = originalText;
+  btn.disabled = false;
+  openMidtransModal(gamertag, platform);
+}
+
+function drawQrCode(orderId){
+  const canvas = document.getElementById("qrisCanvas");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const size = 180;
+  const cells = 15;
+  const cellSize = size / cells;
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, size, size);
+
+  let seed = 0;
+  for(let i = 0; i < orderId.length; i++){
+    seed = orderId.charCodeAt(i) + ((seed << 5) - seed);
+  }
+
+  ctx.fillStyle = "#0b0e0c";
+  for(let r = 0; r < cells; r++){
+    for(let c = 0; c < cells; c++){
+      const inCornerTL = r < 4 && c < 4;
+      const inCornerTR = r < 4 && c >= cells - 4;
+      const inCornerBL = r >= cells - 4 && c < 4;
+      if(inCornerTL || inCornerTR || inCornerBL){
+        if(r === 0 || r === 3 || c === 0 || c === 3 || r === cells - 1 || r === cells - 4 || c === cells - 1 || c === cells - 4){
+          ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+        }else if((r === 1 || r === 2 || r === cells - 2 || r === cells - 3) && (c === 1 || c === 2 || c === cells - 2 || c === cells - 3)){
+          ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+        }
+      }else{
+        const bit = Math.abs((seed * (r + 1) * 31) ^ ((c + 1) * 17)) % 3;
+        if(bit === 0){
+          ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+  }
+}
+
+function openMidtransModal(gamertag, platform){
+  const orderId = "INV-" + Date.now().toString().slice(-6);
+  activeSnapTx = {
+    orderId,
+    gamertag,
+    platform,
+    itemType: currentOrder.type,
+    itemName: currentOrder.name,
+    price: currentOrder.price,
+    moneySteps: currentOrder.moneySteps || 1,
+    method: selectedPayChannel.code
+  };
+
+  document.getElementById("snapOrderId").textContent = `Order #${orderId}`;
+  document.getElementById("snapTotalAmount").textContent = rupiah(currentOrder.price);
+  document.getElementById("snapItemLabel").textContent = `${currentOrder.type} · ${currentOrder.name}`;
+  document.getElementById("snapPlayerLabel").textContent = `${gamertag} (${platform})`;
+  document.getElementById("snapMethodLabel").textContent = selectedPayChannel.label;
+
+  document.getElementById("snapPaymentBody").style.display = "block";
+  document.getElementById("snapSuccessBody").style.display = "none";
+
+  drawQrCode(orderId);
+  document.getElementById("midtransModal").classList.add("open");
+}
+
+function closeMidtransModal(){
+  document.getElementById("midtransModal").classList.remove("open");
+}
+
+async function confirmMidtransPayment(){
+  if(!activeSnapTx) return;
+  await applyPurchaseToAccount(activeSnapTx.orderId, activeSnapTx.gamertag, activeSnapTx.platform);
+  document.getElementById("snapSuccessDesc").innerHTML =
+    `<b>${activeSnapTx.itemType} · ${activeSnapTx.itemName}</b> telah aktif untuk akun <b>${activeSnapTx.gamertag}</b> di Client Area &amp; server <b>mc.playnet.my.id</b>.`;
+  document.getElementById("snapPaymentBody").style.display = "none";
+  document.getElementById("snapSuccessBody").style.display = "block";
+}
+
+async function applyPurchaseToAccount(orderId, gamertag, platform){
+  if(!currentOrder) return;
+
+  if(!mcSession || mcSession.gamertag !== gamertag){
+    mcSession = loadPlayerProfile(gamertag, platform);
+    mcSession.rawGamertag = gamertag.replace(/^\./, "");
+    mcSession.gamertag = gamertag;
+    mcSession.platform = platform;
+  }
+
+  const timeStr = new Date().toLocaleTimeString("id-ID", {hour:"2-digit", minute:"2-digit"});
+
+  if(currentOrder.type === "Rank"){
+    mcSession.activeRank = currentOrder.name;
+    // Rank also grants matching kit if available
+    const matchingKit = kitData.find(k => k.name === currentOrder.name);
+    if(matchingKit){
+      mcSession.kits.unshift({
+        name: `${matchingKit.name} Kit (Bonus Rank)`,
+        date: timeStr,
+        claimed: true
+      });
+    }
+  }else if(currentOrder.type === "Kit"){
+    mcSession.kits.unshift({
+      name: currentOrder.name,
+      date: timeStr,
+      claimed: false
+    });
+  }else if(currentOrder.type === "Money In Game"){
+    const addedMoney = (currentOrder.moneySteps || 1) * MONEY_PER_STEP;
+    mcSession.moneyBalance = (mcSession.moneyBalance || 0) + addedMoney;
+  }
+
+  mcSession.invoices.unshift({
+    orderId: orderId || ("INV-" + Date.now().toString().slice(-6)),
+    item: `${currentOrder.type} · ${currentOrder.name}`,
+    price: rupiah(currentOrder.price),
+    method: selectedPayChannel.code,
+    time: timeStr
+  });
+
+  saveCurrentPlayerProfile();
+  renderAllAccountState();
+
+  // Trigger RCON delivery in background when running on server/Termux/Vercel
+  try{
+    const rconEndpoint = `${window.location.origin}/api/rcon-deliver`;
+    await fetch(rconEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        gamertag: mcSession.gamertag,
+        platform: mcSession.platform,
+        itemType: currentOrder.type,
+        itemName: currentOrder.name,
+        moneySteps: currentOrder.moneySteps || 1
+      })
+    });
+  }catch(e){}
+
+  showToast(`${currentOrder.name} berhasil diaktifkan untuk ${mcSession.gamertag}!`);
+}
+
+function goToClientAreaAfterPay(){
+  closeMidtransModal();
+  document.getElementById("client-area").scrollIntoView({behavior:"smooth"});
+}
+
+/* WHATSAPP & CLIPBOARD */
+function buildOrderMessage(){
+  if(!currentOrder){
+    return null;
+  }
+
+  const gamertag = document.getElementById("gamertag").value.trim();
+  const platform = document.getElementById("platform").value;
+
+  if(!gamertag){
+    showToast("Masukkan gamertag dulu.");
+    return null;
+  }
+
+  return `Halo admin PlayNetwork SMP 👋
+
+Saya ingin melakukan order.
+
+Produk: ${currentOrder.type}
+Item: ${currentOrder.name}
+Harga: ${rupiah(currentOrder.price)}
+
+Gamertag: ${gamertag}
+Platform: ${platform}
+
+Mohon diproses jika sudah tersedia.`;
+}
+
+function sendOrder(){
+  const message = buildOrderMessage();
+  if(!message){
+    return;
+  }
+
+  const encoded = encodeURIComponent(message);
+  let url;
+  if(ADMIN_NUMBER){
+    url = `https://wa.me/${ADMIN_NUMBER}?text=${encoded}`;
+  }else{
+    url = `https://wa.me/?text=${encoded}`;
+  }
+  window.open(url,"_blank");
+}
+
+async function copyOrder(){
+  const message = buildOrderMessage();
+  if(!message){
+    return;
+  }
+
+  try{
+    await navigator.clipboard.writeText(message);
+    showToast("Pesan order berhasil disalin.");
+  }catch{
+    fallbackCopy(message);
+  }
+}
+
+async function copyText(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    showToast("Berhasil disalin.");
+  }catch{
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text){
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
+  showToast("Berhasil disalin.");
+}
+
+function showToast(message){
+  const oldToast = document.querySelector(".toast");
+  if(oldToast){
+    oldToast.remove();
+  }
+
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(()=>{
+    toast.remove();
+  },2400);
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  renderRanks();
+  renderKits();
+  updateMoney();
+
+  const savedSession = safeGetStorage("playnet_mc_session");
+  if(savedSession){
+    try{
+      const parsed = JSON.parse(savedSession);
+      if(parsed && parsed.gamertag){
+        mcSession = loadPlayerProfile(parsed.gamertag, parsed.platform);
+      }
+    }catch(e){
+      mcSession = null;
+    }
+  }
+  renderAllAccountState();
+  checkServerStatus();
+});
+</script>
+
+</body>
+</html>
